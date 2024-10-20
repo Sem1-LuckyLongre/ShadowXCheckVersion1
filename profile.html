@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Profile Page || ShadowX</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        .error {
+            border: 2px solid red;
+        }
+
+        .outline-0 {
+            outline: none;
+            border: none;
+        }
+
+        .w-10 {
+            width: 10rem;
+        }
+
+        input {
+            border-radius: 20px;
+            padding: 5px 15px;
+            outline: none;
+        }
+
+        .updateBox {
+            width: 75vw;
+            position: absolute;
+            top: -100rem;
+            left: 10%;
+            transition: .5s;
+        }
+
+        .updateEnable {
+            width: 75vw;
+            position: absolute;
+            top: 0%;
+            left: 10%;
+            transition: .5s;
+        }
+
+        .blurBox {
+            display: none;
+        }
+
+        .blurBoxEnable {
+            width: 100%;
+            height: 65rem;
+            position: absolute;
+            top: 0;
+            background: transparent;
+            backdrop-filter: blur(5px);
+        }
+
+        .fontSize {
+            height: 2rem;
+            margin: 0;
+        }
+
+        #loader {
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            position: absolute;
+            top: 60%;
+            left: 30%;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .custom-control {
+            display: flex;
+            align-items: center;
+        }
+
+        .custom-control-input {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-right: 10px; /* Space between checkbox and label */
+        }
+
+        .custom-control-label {
+            font-size: 0.9rem; /* Font size for the label */
+            color: #495057; /* Bootstrap text color */
+            cursor: pointer; /* Change cursor on hover */
+        }
+
+        /* Checkbox Styling */
+        .custom-control-input:checked {
+            background-color: #007bff; /* Change to your desired color */
+            border-color: #007bff;
+        }
+
+        /* Label Color on Checkbox Hover */
+        .custom-control-input:checked+.custom-control-label {
+            color: #007bff; /* Change label color when checkbox is checked */
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">ShadowX</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active text-success" aria-current="page" href="#">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="Activities.html">Activities</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark">Ticket Purchase</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark">Time Table</a>
+                    </li>
+                </ul>
+                <button class="btn btn-primary mx-2 my-2 text-dark btn-block" onclick="logout()">Logout</button>
+                <button class="btn btn-danger mx-2 my-1 text-dark btn-block" onclick="DeleteProfile()">Delete Account</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid d-flex my-2 gap-2 py-2 justify-content-center align-items-center flex-column bg-light">
+        <img src="profile.png" class="rounded-circle w-10 card-img-top" id="Img" alt="Profile Image">
+        <h1 id="name" class="text-center my-2 fs-1"></h1>
+    </div>
+
+    <div class="container-fluid d-flex py-2 flex-column gap-3 my-2 bg-light">
+        <div class="card card-body bg-light d-flex">
+            <h2 class="card-info fs-3">Course</h2>
+            <input readonly class="outline-0" id="course">
+        </div>
+        <div class="card card-body bg-light d-flex">
+            <h2 class="card-info fs-3">Department</h2>
+            <input readonly class="outline-0" id="depart">
+        </div>
+        <div class="card card-body bg-light d-flex">
+            <h2 class="card-info fs-3">Roll Number</h2>
+            <input readonly class="outline-0" id="roll">
+        </div>
+        <div class="card card-body bg-light d-flex">
+            <h2 class="card-info fs-3">Email Address</h2>
+            <input readonly class="outline-0" id="email">
+        </div>
+        <div class="input-group-append d-flex justify-content-center align-items-center">
+            <input type="file" class="d-none form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+            <label class="btn my-2 mx-auto btn-dark text-light" for="inputGroupFile04" id="ChangeImg">Update Image</label>
+        </div>
+        <div class="card card-body bg-light d-flex">
+            <h2>Update Profile</h2>
+            <button class="btn btn-dark text-light" onclick="update()">Update</button>
+        </div>
+    </div>
+
+    <div id="blurBox" class="blurBox"></div>
+    <form>
+        <div id="update" class="updateBox container-fluid d-flex py-2 flex-column bg-light">
+            <h1 class="text-center text-primary fs-2">Change Your Profile</h1>
+            <div class="card card-body bg-light my-2 d-flex">
+                <h3 class="fs-5">Name</h3>
+                <input id="Uname" class="form-control fontSize" type="text">
+            </div>
+            <div class="card card-body bg-light my-2 d-flex">
+                <h3 class="fs-5">Email</h3>
+                <input id="Uemail" class="form-control fontSize" type="email">
+            </div>
+            <div class="card card-body bg-light my-2 d-flex">
+                <h3 class="fs-5">ID</h3>
+                <input id="Uid" class="form-control fontSize" type="text">
+            </div>
+            <div class="card card-body bg-light my-2 d-flex">
+                <h3 class="fs-5">Course</h3>
+                <input id="Ucourse" class="form-control fontSize" type="text">
+            </div>
+            <div class="card card-body bg-light my-2 d-flex">
+                <h3 class="fs-5">Roll Number</h3>
+                <input id="Uroll" class="form-control fontSize" type="number">
+            </div>
+            <div class="card card-body bg-light my-2 d-flex">
+                <h3 class="fs-5">Department</h3>
+                <input id="Udepart" class="form-control fontSize" type="text">
+            </div>
+            <div class="card card-body bg-light my-2 d-flex">
+                <h3 class="fs-5">Password</h3>
+                <input id="Ppass" class="form-control fontSize" type="password" placeholder="Enter Your Previous Password">
+                <input id="Npass" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,25}$" class="form-control my-2" type="password" placeholder="Enter Your New Password">
+
+                <div class="custom-control custom-checkbox my-2">
+                    <input type="checkbox" class="custom-control-input" id="showNewPassword">
+                    <label class="custom-control-label" for="showNewPassword">Show New Password</label>
+                </div>
+
+                <input id="Cpass" class="form-control fontSize" type="password" placeholder="Confirm Your Password">
+
+                <div class="custom-control custom-checkbox my-2">
+                    <input type="checkbox" class="custom-control-input" id="showConfirmPassword">
+                    <label class="custom-control-label" for="showConfirmPassword">Show Confirm Password</label>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-dark text-light" onclick="updateProfile()">Update Profile</button>
+        </div>
+    </form>
+    <div id="loader"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="./scripts/profile.js"></script>
+</body>
+
+</html>
