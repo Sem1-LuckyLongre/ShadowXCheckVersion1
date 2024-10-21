@@ -59,10 +59,7 @@ InputFile.addEventListener("change", (event) => {
     Loader.style.display = 'block';
 
     function UpImg() {
-        const Reload = "Your Profile Image is Changed Successfully.";
-        if (confirm(Reload)) {
             location.reload();
-        }
     }
 });
 
@@ -197,8 +194,6 @@ function DeleteProfile() {
                 window.location.assign("index.html");
             }, 2000); // 2000 ms delay
         }
-    } else {
-        alert("Action Cancelled.");
     }
 }
 showNewPassword =  document.getElementById('showNewPassword')       
